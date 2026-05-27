@@ -7,6 +7,7 @@ import { Title } from '@/Components/Preferences/PreferencesComponents/Content'
 import Button from '@/Components/Button/Button'
 import PreferencesGroup from '@/Components/Preferences/PreferencesComponents/PreferencesGroup'
 import { isIOS } from '@standardnotes/ui-services'
+import { c } from 'ttag'
 
 type Props = {
   application: WebApplication
@@ -28,10 +29,16 @@ const MultitaskingPrivacy = ({ application }: Props) => {
     ;(application.device as MobileDeviceInterface).setAndroidScreenshotPrivacy(enable)
   }
 
-  const screenshotPrivacyFeatureText = isIOS() ? 'Multitasking Privacy' : 'Multitasking/Screenshot Privacy'
-  const screenshotPrivacyTitle = hasScreenshotPrivacy
-    ? `Disable ${screenshotPrivacyFeatureText}`
-    : `Enable ${screenshotPrivacyFeatureText}`
+  const screenshotPrivacyFeatureText = isIOS()
+    ? c('Title').t`Multitasking Privacy`
+    : c('Title').t`Multitasking/Screenshot Privacy`
+  const screenshotPrivacyTitle = isIOS()
+    ? hasScreenshotPrivacy
+      ? c('Action').t`Disable Multitasking Privacy`
+      : c('Action').t`Enable Multitasking Privacy`
+    : hasScreenshotPrivacy
+    ? c('Action').t`Disable Multitasking/Screenshot Privacy`
+    : c('Action').t`Enable Multitasking/Screenshot Privacy`
 
   return (
     <div>

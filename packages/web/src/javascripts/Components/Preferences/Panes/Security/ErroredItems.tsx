@@ -8,6 +8,7 @@ import PreferencesSegment from '../../PreferencesComponents/PreferencesSegment'
 import PreferencesGroup from '../../PreferencesComponents/PreferencesGroup'
 import { ErrorCircle } from '@/Components/UIElements/ErrorCircle'
 import { useApplication } from '@/Components/ApplicationProvider'
+import { c, msgid, ngettext } from 'ttag'
 
 const ErroredItems: FunctionComponent = () => {
   const application = useApplication()
@@ -28,7 +29,7 @@ const ErroredItems: FunctionComponent = () => {
     if (display) {
       return `${display[0].toUpperCase()}${display.slice(1)}`
     } else {
-      return `Item of type ${item.content_type}`
+      return c('Info').t`Item of type ${item.content_type}`
     }
   }
 
@@ -37,10 +38,15 @@ const ErroredItems: FunctionComponent = () => {
   }
 
   const deleteItems = async (items: EncryptedItemInterface[]): Promise<void> => {
+    const itemCount = items.length
     const confirmed = await application.alerts.confirm(
-      `Are you sure you want to permanently delete ${items.length} item(s)?`,
+      ngettext(
+        msgid`Are you sure you want to permanently delete ${itemCount} item?`,
+        `Are you sure you want to permanently delete ${itemCount} items?`,
+        itemCount,
+      ),
       undefined,
-      'Delete',
+      c('Action').t`Delete`,
       ButtonType.Danger,
     )
     if (!confirmed) {
@@ -75,13 +81,19 @@ const ErroredItems: FunctionComponent = () => {
       <PreferencesSegment>
         <Title className="flex flex-row items-center gap-2">
           <ErrorCircle />
-          Error decrypting items
+          {c('Title').t`Error decrypting items`}
         </Title>
-        <Text>{`${erroredItems.length} items are errored and could not be decrypted.`}</Text>
+        <Text>
+          {ngettext(
+            msgid`${erroredItems.length} item is errored and could not be decrypted.`,
+            `${erroredItems.length} items are errored and could not be decrypted.`,
+            erroredItems.length,
+          )}
+        </Text>
         <div className="flex">
           <Button
             className="mr-2 mt-3 min-w-20"
-            label="Export all"
+            label={c('Action').t`Export all`}
             onClick={() => {
               void application.archiveService.downloadEncryptedItems(erroredItems)
             }}
@@ -89,7 +101,7 @@ const ErroredItems: FunctionComponent = () => {
           <Button
             className="mr-2 mt-3 min-w-20"
             colorStyle="danger"
-            label="Delete all"
+            label={c('Action').t`Delete all`}
             onClick={() => {
               void deleteItems(erroredItems)
             }}
@@ -102,20 +114,22 @@ const ErroredItems: FunctionComponent = () => {
             <Fragment key={item.uuid}>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col">
-                  <Subtitle>{`${getContentTypeDisplay(item)} created on ${item.createdAtString}`}</Subtitle>
-                  <Text>Item ID: {item.uuid}</Text>
-                  <Text>Last Modified: {item.updatedAtString}</Text>
+                  <Subtitle>
+                    {c('Subtitle').t`${getContentTypeDisplay(item)} created on ${item.createdAtString}`}
+                  </Subtitle>
+                  <Text>{c('Info').t`Item ID: ${item.uuid}`}</Text>
+                  <Text>{c('Info').t`Last Modified: ${item.updatedAtString}`}</Text>
                   <div className="flex">
                     <Button
                       className="mr-2 mt-3 min-w-20"
-                      label="Attempt decryption"
+                      label={c('Action').t`Attempt decryption`}
                       onClick={() => {
                         attemptDecryption(item)
                       }}
                     />
                     <Button
                       className="mr-2 mt-3 min-w-20"
-                      label="Export"
+                      label={c('Action').t`Export`}
                       onClick={() => {
                         void application.archiveService.downloadEncryptedItem(item)
                       }}
@@ -123,7 +137,7 @@ const ErroredItems: FunctionComponent = () => {
                     <Button
                       className="mr-2 mt-3 min-w-20"
                       colorStyle="danger"
-                      label="Delete"
+                      label={c('Action').t`Delete`}
                       onClick={() => {
                         void deleteItem(item)
                       }}

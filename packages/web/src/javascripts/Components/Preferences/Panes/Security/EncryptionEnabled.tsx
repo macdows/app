@@ -4,7 +4,7 @@ import { ContentType, StaticItemCounter } from '@standardnotes/snjs'
 import { observer } from 'mobx-react-lite'
 import { FunctionComponent } from 'react'
 import EncryptionStatusItem from './EncryptionStatusItem'
-import { formatCount } from './formatCount'
+import { msgid, ngettext } from 'ttag'
 
 const EncryptionEnabled: FunctionComponent = () => {
   const application = useApplication()
@@ -12,12 +12,12 @@ const EncryptionEnabled: FunctionComponent = () => {
   const count = itemCounter.countNotesAndTags(
     application.items.getItems([ContentType.TYPES.Note, ContentType.TYPES.Tag]),
   )
-  const files = application.items.getItems([ContentType.TYPES.File])
-  const notes = formatCount(count.notes, 'notes')
-  const tags = formatCount(count.tags, 'tags')
-  const archived = formatCount(count.archived, 'archived notes')
-  const deleted = formatCount(count.deleted, 'trashed notes')
-  const filesCount = formatCount(files.length, 'files')
+  const filesLength = application.items.getItems([ContentType.TYPES.File]).length
+  const notes = ngettext(msgid`${count.notes} note`, `${count.notes} notes`, count.notes)
+  const tags = ngettext(msgid`${count.tags} tag`, `${count.tags} tags`, count.tags)
+  const archived = ngettext(msgid`${count.archived} archived note`, `${count.archived} archived notes`, count.archived)
+  const deleted = ngettext(msgid`${count.deleted} trashed note`, `${count.deleted} trashed notes`, count.deleted)
+  const filesCount = ngettext(msgid`${filesLength} file`, `${filesLength} files`, filesLength)
 
   const noteIcon = <Icon type="rich-text" className="min-h-5 min-w-5" />
   const tagIcon = <Icon type="hashtag" className="min-h-5 min-w-5" />

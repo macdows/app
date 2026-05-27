@@ -20,6 +20,7 @@ import PreferencesGroup from '../../PreferencesComponents/PreferencesGroup'
 import PreferencesSegment from '../../PreferencesComponents/PreferencesSegment'
 import DecoratedPasswordInput from '@/Components/Input/DecoratedPasswordInput'
 import { classNames } from '@standardnotes/utils'
+import { c } from 'ttag'
 
 type Props = {
   application: WebApplication
@@ -187,22 +188,24 @@ const PasscodeLock = ({ application }: Props) => {
     <>
       <PreferencesGroup>
         <PreferencesSegment>
-          <Title>Passcode lock</Title>
+          <Title>{c('Title').t`Passcode lock`}</Title>
 
           {!hasPasscode && canAddPasscode && (
             <>
-              <Text className="mb-3">Add a passcode to lock the application and encrypt on-device key storage.</Text>
+              <Text className="mb-3">
+                {c('Info').t`Add a passcode to lock the application and encrypt on-device key storage.`}
+              </Text>
 
               {keyStorageInfo && <Text className="mb-3">{keyStorageInfo}</Text>}
 
-              {!showPasscodeForm && <Button label="Add passcode" onClick={handleAddPassCode} primary />}
+              {!showPasscodeForm && <Button label={c('Action').t`Add passcode`} onClick={handleAddPassCode} primary />}
             </>
           )}
 
           {!hasPasscode && !canAddPasscode && (
             <Text>
-              Adding a passcode is not supported in temporary sessions. Please sign out, then sign back in with the
-              "Stay signed in" option checked.
+              {c('Info')
+                .t`Adding a passcode is not supported in temporary sessions. Please sign out, then sign back in with the "Stay signed in" option checked.`}
             </Text>
           )}
 
@@ -213,26 +216,26 @@ const PasscodeLock = ({ application }: Props) => {
                 ref={passcodeInputRef}
                 value={passcode ? passcode : ''}
                 onChange={handlePasscodeChange}
-                placeholder="Passcode"
+                placeholder={c('Label').t`Passcode`}
               />
               <DecoratedPasswordInput
                 className={{ container: 'mt-2' }}
                 type="password"
                 value={passcodeConfirmation ? passcodeConfirmation : ''}
                 onChange={handleConfirmPasscodeChange}
-                placeholder="Confirm Passcode"
+                placeholder={c('Label').t`Confirm Passcode`}
               />
-              <Button primary onClick={submitPasscodeForm} label="Set Passcode" className="mr-3 mt-3" />
-              <Button onClick={cancelPasscodeForm} label="Cancel" />
+              <Button primary onClick={submitPasscodeForm} label={c('Action').t`Set Passcode`} className="mr-3 mt-3" />
+              <Button onClick={cancelPasscodeForm} label={c('Action').t`Cancel`} />
             </form>
           )}
 
           {hasPasscode && !showPasscodeForm && (
             <>
-              <Text>Passcode lock is enabled.</Text>
+              <Text>{c('Info').t`Passcode lock is enabled.`}</Text>
               <div className="mt-3 flex flex-row">
-                <Button label="Change Passcode" onClick={changePasscodePressed} className="mr-3" />
-                <Button colorStyle="danger" label="Remove Passcode" onClick={removePasscodePressed} />
+                <Button label={c('Action').t`Change Passcode`} onClick={changePasscodePressed} className="mr-3" />
+                <Button colorStyle="danger" label={c('Action').t`Remove Passcode`} onClick={removePasscodePressed} />
               </div>
             </>
           )}
@@ -244,8 +247,8 @@ const PasscodeLock = ({ application }: Props) => {
           <div className="min-h-3" />
           <PreferencesGroup>
             <PreferencesSegment>
-              <Title>Autolock</Title>
-              <Text className="mb-3">The autolock timer begins when the window or tab loses focus.</Text>
+              <Title>{c('Title').t`Autolock`}</Title>
+              <Text className="mb-3">{c('Info').t`The autolock timer begins when the window or tab loses focus.`}</Text>
               <div className="flex flex-row items-center">
                 {autolockService.getAutoLockIntervalOptions().map((option) => {
                   return (
@@ -274,10 +277,10 @@ const PasscodeLock = ({ application }: Props) => {
           <div className="min-h-3" />
           <PreferencesGroup>
             <PreferencesSegment>
-              <Title>Passcode Autolock</Title>
+              <Title>{c('Title').t`Passcode Autolock`}</Title>
               <div className="flex flex-row items-center">
                 <div className="mt-2 flex flex-row items-center">
-                  <div className={'mr-3'}>Require Passcode</div>
+                  <div className={'mr-3'}>{c('Label').t`Require Passcode`}</div>
                   {mobilePasscodeTimingOptions.map((option) => {
                     return (
                       <a
